@@ -1,0 +1,123 @@
+<html>
+	<head>
+		<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+		<meta content="utf-8" http-equiv="encoding">
+
+		<title>Patio Blueprints</title>
+		<link rel="stylesheet" type="text/css" href="main.css">
+		<script type="text/javascript" src="node_modules/paper/dist/paper-full.js"></script>
+		<script type="module">
+		import {redraw, initialize} from './main.js';
+
+		initialize();
+		window.redraw = redraw;
+		</script>
+	</head>
+	<body>
+		<div class="controls">
+			<div class="layers">
+				<h1>Layers</h1>
+				<ul>
+					<li>
+						<input id="foundation" type="checkbox" oninput="redraw()">
+						<label for="foundation">Foundation</label>
+					</li>
+					<li>
+						<input id="deckboards" type="checkbox" oninput="redraw()">
+						<label for="deckboards">Deckboards</label>
+					</li>
+					<li>
+						<input id="posts" type="checkbox" oninput="redraw()">
+						<label for="posts">Posts</label>
+					</li>
+					<li>
+						<input id="siding" type="checkbox" oninput="redraw()">
+						<label for="siding">Siding</label>
+					</li>
+					<li>
+						<input id="origin" type="checkbox" oninput="redraw()">
+						<label for="origin">Coordinate Origin</label>
+					</li>
+				</ul>
+			</div>
+			<div class="options">
+				<h1>Options</h1>
+				<ul>
+					<li>
+						<h2>Deck Color</h2>
+						<select oninput="redraw()">
+							<option>Coastal Bluff</option>
+						</select>
+					</li>
+					<li>
+						<h2>Border Color</h2>
+						<select oninput="redraw()">
+							<option>Spiced Rum</option>
+						</select>
+					</li>
+					<li>
+						<h2>Railing Color</h2>
+						<select oninput="redraw()">
+							<option>Vintage Lantern</option>
+						</select>
+					</li>
+					<li>
+						<h2>Zoom Level</h2>
+						<select id="zoomLevel" oninput="redraw()">
+							<option value="1">1px / inch</option>
+							<option value="2">2px / inch</option>
+							<option value="4">4px / inch</option>
+							<option value="8">8px / inch</option>
+							<option value="16">16px / inch</option>
+							<option value="32">32px / inch</option>
+						</select>
+					</li>
+				</ul>
+			</div>
+			<div class="details">
+				<h1 class="name"></h1>
+				<div class="value"></div>
+			</div>
+		</div>
+
+		<div class="layout">
+			<div class="container">
+				<canvas id="layoutCanvas"></canvas>
+			</div>
+		</div>
+
+		<div class="joistView hidden">
+			<div class="container">
+				<canvas id="joistViewCanvas"></canvas>
+			</div>
+		</div>
+
+		<div class="deckColors">
+			<img id="foggyWharf" src="https://images.trex.com/is/image/Trex/trex-enhance-naturals-decking-foggy-wharf-board-grain-detail-pattern-color-selector.jpg" />
+			<img id="rockyHarbor" src="https://images.trex.com/is/image/Trex/trex-enhance-naturals-decking-rocky-harbor-board-grain-detail-pattern-color-selector.jpg" />
+			<img id="clamShell" src="https://images.trex.com/is/image/Trex/trex-enhance-basic-decking-clam-shell-board-grain-detail-pattern-color-selector.jpg" />
+			<img id="pebbleGrey" src="https://images.trex.com/is/image/Trex/trex-select-pebble-grey-swatch.jpg" />
+			<img id="winchesterGrey" src="https://images.trex.com/is/image/Trex/trex-select-winchester-grey-swatch.jpg" />
+			<img id="gravelPath" src="https://images.trex.com/is/image/Trex/trex-transcend-earth-tone-gravel-path-swatch.jpg" />
+			<img id="islandMist" src="https://images.trex.com/is/image/Trex/trex-transcend-island-mist-swatch.jpg" />
+			<img id="beachDune" src="https://images.trex.com/is/image/Trex/trex-enhance-basic-decking-beach-dune-board-grain-detail-pattern-color-selector.jpg" />
+			<img id="toastedSand" src="https://images.trex.com/is/image/Trex/trex-enhance-naturals-decking-toasted-sand-board-grain-detail-pattern-color-selector.jpg" />
+			<img id="enhanceSaddle" src="https://images.trex.com/is/image/Trex/trex-enhance-basic-decking-saddle-board-grain-detail-pattern-color-selector.jpg" />
+			<img id="coastalBluff" src="https://images.trex.com/is/image/Trex/trex-enhance-naturals-decking-coastal-bluff-board-grain-detail-pattern-color-selector.jpg" />
+			<img id="selectSaddle" src="https://images.trex.com/is/image/Trex/trex-select-saddle-swatch.jpg" />
+			<img id="woodlandBrown" src="https://images.trex.com/is/image/Trex/trex-select-woodland-brown-swatch.jpg" />
+			<img id="ropeSwing" src="https://images.trex.com/is/image/Trex/trex-transcend-earth-tone-rope-swing-swatch.jpg" />
+			<img id="tikiTorch" src="https://images.trex.com/is/image/Trex/trex-transcend-tiki-torch-swatch.jpg" />
+			<img id="treeHouse" src="https://images.trex.com/is/image/Trex/trex-transcend-earth-tone-tree-house-swatch.jpg" />
+			<img id="havanaGold" src="https://images.trex.com/is/image/Trex/trex-transcend-havana-gold-swatch.jpg" />
+			<img id="spicedRum" src="https://images.trex.com/is/image/Trex/trex-transcend-spiced-rum-swatch.jpg" />
+			<img id="vintageLantern" src="https://images.trex.com/is/image/Trex/trex-transcend-earth-tone-vintage-lantern-swatch.jpg" />
+			<img id="sunsetCove" src="https://images.trex.com/is/image/Trex/trex-enhance-naturals-decking-sunset-cove-board-grain-detail-pattern-color-selector.jpg" />
+			<img id="madeira" src="https://images.trex.com/is/image/Trex/trex-select-madeira-swatch.jpg" />
+			<img id="firePit" src="https://images.trex.com/is/image/Trex/trex-transcend-earth-tone-fire-pit-swatch.jpg" />
+			<img id="lavaRock" src="https://images.trex.com/is/image/Trex/trex-transcend-lava-rock-swatch.jpg" />
+
+			<svg id="svg" />
+		</div>
+	</body>
+</html>

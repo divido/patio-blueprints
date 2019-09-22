@@ -1,0 +1,180 @@
+body {
+	font-size: 12px;
+}
+
+h1 {
+	margin-top: 0;
+	font-size: 16px;
+}
+
+h2 {
+	margin: 0;
+	font-size: 12px;
+}
+
+ul, li, input {
+	margin: 0;
+	padding: 0
+}
+
+ul {
+	list-style: none;
+}
+
+.layers li {
+	display: flex;
+	align-items: center;
+}
+
+.options li {
+	display: flex;
+	flex-direction: column;
+}
+
+input {
+	height: 1em;
+	width: 1em;
+}
+
+label {
+	padding-left: 0.25em;
+}
+
+select {
+	padding: 0;
+	border: 1px solid lightgray;
+	margin-bottom: 0.5em;
+}
+
+/* -------------------------------------------------------------------------------- */
+
+body {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0.5em;
+}
+
+/* -------------------------------------------------------------------------------- */
+
+.deckColors {
+	display: none;
+}
+
+/* -------------------------------------------------------------------------------- */
+
+.controls {
+	flex: none;
+	display: flex;
+	border-bottom: 1px solid black;
+}
+
+.layers, .options, .details {
+	padding: 1em;
+	padding-top: 0;
+}
+
+.layers {
+	padding-left: 0;
+}
+
+.layers, .options {
+	flex: none;
+	border-right: 1px solid black;
+}
+
+.details {
+	flex: auto;
+	padding-right: 0;
+}
+
+/* -------------------------------------------------------------------------------- */
+
+.layout {
+	flex: 2;
+	position: relative;
+}
+
+.joistView {
+	flex: 1 1;
+	border-top: 1px solid black;
+	position: relative;
+}
+
+.joistView.hidden {
+	display: none;
+}
+
+.container {
+	border: 1px solid gray;
+	box-shadow: 0.1em 0.1em 0.5em gray;
+
+	position: absolute;
+	top: 1em;
+	bottom: 1em;
+	left: 0;
+	right: 0;
+
+	overflow: auto;
+}
+
+/* -------------------------------------------------------------------------------- */
+
+.details table {
+	font-size: 12px;
+	border-collapse: collapse;
+}
+
+.details sup, .details sub {
+	font-size: 8px;
+}
+
+.coordinateTable {
+	border: 1px solid gray;
+	box-shadow: 0.1em 0.1em 0.5em gray;
+	cursor: default;
+}
+
+.coordinateTable .name {
+	text-align: left;
+}
+
+.coordinateTable .coord {
+	text-align: right;
+	padding-left: 1em;
+}
+
+.coordinateTable .headerRow .coord {
+	padding-right: 0.5em;
+}
+
+.coordinateTable tr:not(.headerRow) .coord {
+	cursor: pointer;
+}
+
+.coordinateTable tr:nth-child(even) {
+	background: hsl(0, 0%, 100%);
+}
+
+.coordinateTable tr:nth-child(odd) {
+	background: hsl(0, 0%, 90%);
+}
+
+.coordinateTable tr.headerRow {
+	background: hsl(120, 50%, 90%);
+	border-bottom: 1px solid gray;
+}
+
+.coordinateTable tr:not(.headerRow):hover {
+	background: hsl(240, 50%, 90%);
+}
+
+.coordinateTable tr:not(.headerRow) .x.coord:hover {
+	color: red;
+}
+
+.coordinateTable tr:not(.headerRow) .y.coord:hover {
+	color: green;
+}
