@@ -62,6 +62,7 @@ export class Posts {
 
 		deckBounds.setSouthernBorder(this.ySouthernPosts + halfPost + postToEdge);
 		deckBounds.setStepEast(postX - halfPost - postToEdge);
+		this.xSouthernPosts_lastPost = postX;
 
 		// ----------------------------------------
 		// Coordinates of post centers on western side
@@ -76,6 +77,8 @@ export class Posts {
 		this.features.push(new Post(layer, details, "Western Post 3", [this.xWesternPosts, thirdPostY]));
 
 		this.features.push(new Post(layer, details, "Step Post", [this.xWesternPosts, this.ySouthernPosts]));
+
+		this.yWesternPosts_thirdPost = thirdPostY;
 	}
 
 	get westernPosts() {
@@ -85,7 +88,9 @@ export class Posts {
 		return {
 			westEdge: this.xWesternPosts - halfPost,
 			center: this.xWesternPosts,
-			eastEdge: this.xWesternPosts + halfPost
+			eastEdge: this.xWesternPosts + halfPost,
+
+			southEdge: this.yWesternPosts_thirdPost + halfPost
 		};
 	}
 
@@ -107,7 +112,9 @@ export class Posts {
 		return {
 			northEdge: this.ySouthernPosts - halfPost,
 			center: this.ySouthernPosts,
-			southEdge: this.ySouthernPosts + halfPost
+			southEdge: this.ySouthernPosts + halfPost,
+
+			westEdge: this.xSouthernPosts_lastPost - halfPost
 		};
 	}
 

@@ -1,4 +1,5 @@
 import { Foundation } from './foundation.js';
+import { Framing } from './framing.js';
 import { DeckBoards } from './deckboards.js';
 import { Posts } from './posts.js';
 import { Siding } from './siding.js';
@@ -34,6 +35,7 @@ export function redraw() {
 
 	allObjects.forEach((obj) => obj.adjust(zoom));
 
+	allLayers.deckboards.opacity = 0.5;
 	layoutProject.view.draw();
 }
 
@@ -45,6 +47,7 @@ export function initialize() {
 	layoutProject.activate();
 	allLayers = {
 		foundation: new paper.Layer(),
+		framing: new paper.Layer(),
 		deckboards: new paper.Layer(),
 		posts: new paper.Layer(),
 		siding: new paper.Layer(),
@@ -61,9 +64,11 @@ export function initialize() {
 	let posts = new Posts(allLayers.posts, foundation, deckBounds, details);
 	let deckboards = new DeckBoards(allLayers.deckboards, deckBounds, details);
 
+	let framing = new Framing(allLayers.framing, foundation, deckBounds, posts, details);
+
 	let siding = new Siding(allLayers.siding, foundation, details);
 
-	allObjects = [foundation, deckboards, posts, siding, details];
+	allObjects = [foundation, framing, deckboards, posts, siding, details];
 
 	layoutProject.view.onMouseDown = () => {
 		layoutProject.deselectAll();

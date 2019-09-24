@@ -1,7 +1,7 @@
 import { BaseShape } from './baseShape.js';
 
-class VerticalDeckBoard extends BaseShape {
-	constructor(layer, details, deckBounds, name, color, west, north, south) {
+class DeckBoard extends BaseShape {
+	constructor(layer, details, deckBounds, name, color, north, south, west, east, buildPiece) {
 		super(layer, details);
 
 		this.name = name;
@@ -11,7 +11,6 @@ class VerticalDeckBoard extends BaseShape {
 		const S = this.deckBounds.boardSpacing;
 		const TS = T + S;
 
-		let east = west + T;
 		this.coords = {
 			'North West': [west, north],
 			'North East': [east, north],
@@ -19,14 +18,14 @@ class VerticalDeckBoard extends BaseShape {
 			'South West': [west, south]
 		};
 
-		const numPieces = Math.ceil((south - north) / T) + 1;
+		let length = Math.max((south - north), (east - west));
+
+		const numPieces = Math.ceil(length / T) + 1;
 		this.offset = Math.random() * T;
 
 		this.pieces = [];
 		for (let i = 0; i < numPieces; i++) {
-			let piece = new paper.Raster(color);
-			if (i % 2 == 1) piece.scale(1, -1);
-			this.pieces.push(piece);
+			this.pieces.push(buildPiece(i));
 		}
 
 		this.boardGroup = new paper.Group([this.shape, ...this.pieces]);
@@ -44,21 +43,9 @@ class VerticalDeckBoard extends BaseShape {
 		const cutT = this.deckBounds.boardThickness * Math.tan(angleRad);
 		const cutDistance = (this.deckBounds.boardSpacing / 2) / Math.cos(angleRad);
 
-		switch (cornerName) {
-			case 'North West':
-			case 'North East':
-				this.coords[cornerName][1] += cutT;
-				this.coords['North West'][1] += cutDistance;
-				this.coords['North East'][1] += cutDistance;
-				break;
-
-			case 'South West':
-			case 'South East':
-				this.coords[cornerName][1] -= cutT;
-				this.coords['South West'][1] -= cutDistance;
-				this.coords['South East'][1] -= cutDistance;
-				break;
-		}
+		let [pointCorner, cutDimenson, cutDirection] = this._miterData(cornerName);
+		this.coords[cornerName][cutDimenson] += cutDirection * (cutT + cutDistance);
+		this.coords[pointCorner][cutDimenson] += cutDirection * (cutDistance);
 
 		return this;
 	}
@@ -69,92 +56,65 @@ class VerticalDeckBoard extends BaseShape {
 		let T = zoom.length(this.deckBounds.boardThickness);
 		let Off = zoom.length(this.offset);
 
+		const dim = this._boundsDimension;
+
 		this.pieces.forEach((piece, idx) => {
 			piece.fitBounds(this.shape.bounds);
 			piece.bounds.x = this.shape.bounds.x;
-			piece.bounds.y = Math.round(this.shape.bounds.y - Off) + T * idx;
+			piece.bounds.y = this.shape.bounds.y;
+
+			piece.bounds[dim] = Math.round(this.shape.bounds[dim] - Off) + T * idx;
 		});
 	}
 }
 
 // --------------------------------------------------------------------------------
 
-class HorizontalDeckBoard extends BaseShape {
-	constructor(layer, details, deckBounds, name, color, north, west, east) {
-		super(layer, details);
-
-		this.name = name;
-		this.deckBounds = deckBounds;
-
-		const T = this.deckBounds.boardThickness;
-		const S = this.deckBounds.boardSpacing;
-		const TS = T + S;
-
-		let south = north + T;
-		this.coords = {
-			'North West': [west, north],
-			'North East': [east, north],
-			'South East': [east, south],
-			'South West': [west, south]
-		};
-
-		const numPieces = Math.ceil((east - west) / T) + 1;
-		this.offset = Math.random() * T;
-
-		this.pieces = [];
-		for (let i = 0; i < numPieces; i++) {
-			let piece = new paper.Raster(color);
-			piece.rotation = 90;
-			if (i % 2 == 1) piece.scale(-1, 1);
-			this.pieces.push(piece);
-		}
-
-		this.boardGroup = new paper.Group([this.shape, ...this.pieces]);
-		this.boardGroup.clipped = true;
-
-		this.boardGroup.onClick = () => {
-			this.shape.selected = true;
-			details.select(this);
-		}
+class VerticalDeckBoard extends DeckBoard {
+	constructor(layer, details, deckBounds, name, color, west, north, south) {
+		super(layer, details, deckBounds, name, color, north, south, west, west + deckBounds.boardThickness,
+			(idx) => {
+				let piece = new paper.Raster(color);
+				if (idx % 2 == 1) piece.scale(1, -1);
+				return piece;
+			});
 	}
 
-	miter(cornerName, angle=45) {
-		const angleRad = angle * Math.PI / 180.0;
-
-		const cutT = this.deckBounds.boardThickness * Math.tan(angleRad);
-		const cutDistance = (this.deckBounds.boardSpacing / 2) / Math.cos(angleRad);
-
+	_miterData(cornerName) {
 		switch (cornerName) {
-			case 'North West':
-			case 'South West':
-				this.coords[cornerName][0] += cutT;
-				this.coords['North West'][0] += cutDistance;
-				this.coords['South West'][0] += cutDistance;
-				break;
-
-			case 'North East':
-			case 'South East':
-				this.coords[cornerName][0] -= cutT;
-				this.coords['North East'][0] -= cutDistance;
-				this.coords['South East'][0] -= cutDistance;
-				break;
+			case 'North West': return ['North East', 1,  1];
+			case 'North East': return ['North West', 1,  1];
+			case 'South West': return ['South East', 1, -1];
+			case 'South East': return ['South West', 1, -1];
 		}
-
-		return this;
 	}
 
-	adjust(zoom) {
-		super.adjustSegments(zoom);
+	get _boundsDimension() { return 'y'; }
+}
 
-		let T = zoom.length(this.deckBounds.boardThickness);
-		let Off = zoom.length(this.offset);
+// --------------------------------------------------------------------------------
 
-		this.pieces.forEach((piece, idx) => {
-			piece.fitBounds(this.shape.bounds);
-			piece.bounds.x = Math.round(this.shape.bounds.x - Off) + T * idx;
-			piece.bounds.y = this.shape.bounds.y;
-		});
+class HorizontalDeckBoard extends DeckBoard {
+	constructor(layer, details, deckBounds, name, color, north, west, east) {
+		super(layer, details, deckBounds, name, color, north, north + deckBounds.boardThickness, west, east,
+			(idx) => {
+				let piece = new paper.Raster(color);
+				piece.rotation = 90;
+				if (idx % 2 == 1) piece.scale(-1, 1);
+				return piece;
+			});
 	}
+
+	_miterData(cornerName) {
+		switch (cornerName) {
+			case 'North West': return ['South West', 0,  1];
+			case 'South West': return ['North West', 0,  1];
+			case 'North East': return ['South East', 0, -1];
+			case 'South East': return ['North East', 0, -1];
+		}
+	}
+
+	get _boundsDimension() { return 'x'; }
 }
 
 // --------------------------------------------------------------------------------
