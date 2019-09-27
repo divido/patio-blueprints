@@ -1,4 +1,5 @@
 import { Foundation } from './foundation.js';
+import { Piers } from './piers.js';
 import { Framing } from './framing.js';
 import { DeckBoards } from './deckboards.js';
 import { Posts } from './posts.js';
@@ -47,6 +48,7 @@ export function initialize() {
 	layoutProject.activate();
 	allLayers = {
 		foundation: new paper.Layer(),
+		piers: new paper.Layer(),
 		framing: new paper.Layer(),
 		deckboards: new paper.Layer(),
 		posts: new paper.Layer(),
@@ -66,9 +68,10 @@ export function initialize() {
 
 	let framing = new Framing(allLayers.framing, foundation, deckBounds, posts, details);
 
+	let piers = new Piers(allLayers.piers, framing, posts, details);
 	let siding = new Siding(allLayers.siding, foundation, details);
 
-	allObjects = [foundation, framing, deckboards, posts, siding, details];
+	allObjects = [foundation, piers, framing, deckboards, posts, siding, details];
 
 	layoutProject.view.onMouseDown = () => {
 		layoutProject.deselectAll();

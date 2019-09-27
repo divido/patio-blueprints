@@ -19,6 +19,8 @@ class Joist extends BaseShape {
 		};
 
 		this.shape.style.fillColor = 'olive';
+
+		this.length = Math.max(this.south - this.north, this.east - this.west);
 	}
 
 	adjust(zoom) {
@@ -161,12 +163,14 @@ export class Framing {
 			north: mainWall.south,
 			south: posts.westernPosts.southEdge
 		});
+		this.westBeam = westBeam;
 
 		let eastBeam = createBeam('Eastern Beam', {
 			center: innerEasternPost.west - thirdOfSpan,
 			north: mainWall.south,
 			south: innerSouthernPost.north
 		});
+		this.eastBeam = eastBeam;
 
 		// ----------------------------------------
 		// Step Framework
