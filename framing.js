@@ -18,9 +18,16 @@ class Joist extends BaseShape {
 			'South West': [this.west, this.south]
 		};
 
+		this.extraCoords = {
+			'Center': [(this.west + this.east) / 2, (this.north + this.south) / 2]
+		};
+
 		this.shape.style.fillColor = 'olive';
 
 		this.length = Math.max(this.south - this.north, this.east - this.west);
+		this.attributes = {
+			'Length': this.length
+		};
 	}
 
 	adjust(zoom) {

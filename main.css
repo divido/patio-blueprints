@@ -122,59 +122,67 @@ body {
 
 /* -------------------------------------------------------------------------------- */
 
+.details > .value {
+	display: flex;
+}
+
 .details table {
 	font-size: 12px;
 	border-collapse: collapse;
+}
+
+.details table:not(:first-child) {
+	margin-left: 0.5em;
 }
 
 .details sup, .details sub {
 	font-size: 8px;
 }
 
-.coordinateTable {
+.details table {
 	border: 1px solid gray;
 	box-shadow: 0.1em 0.1em 0.5em gray;
 	cursor: default;
 }
 
-.coordinateTable .name {
+.details table .name {
 	text-align: left;
 }
 
-.coordinateTable .coord {
+.details table .value {
 	text-align: right;
 	padding-left: 1em;
 }
 
-.coordinateTable .headerRow .coord {
+.details table .headerRow .value {
 	padding-right: 0.5em;
 }
 
-.coordinateTable tr:not(.headerRow) .coord {
-	cursor: pointer;
-}
-
-.coordinateTable tr:nth-child(even) {
+.details table tr:nth-child(even) {
 	background: hsl(0, 0%, 100%);
 }
 
-.coordinateTable tr:nth-child(odd) {
+.details table tr:nth-child(odd) {
 	background: hsl(0, 0%, 90%);
 }
 
-.coordinateTable tr.headerRow {
+.details table tr.headerRow {
 	background: hsl(120, 50%, 90%);
 	border-bottom: 1px solid gray;
 }
 
-.coordinateTable tr:not(.headerRow):hover {
+.details table tr:not(.headerRow):hover {
 	background: hsl(240, 50%, 90%);
 }
 
-.coordinateTable tr:not(.headerRow) .x.coord:hover {
+.coordinateTable tr:not(.headerRow) .value {
+	cursor: pointer;
+}
+
+.coordinateTable tr:not(.headerRow) .x.value:hover {
 	color: red;
 }
 
-.coordinateTable tr:not(.headerRow) .y.coord:hover {
+.coordinateTable tr:not(.headerRow) .y.value:hover {
 	color: green;
 }

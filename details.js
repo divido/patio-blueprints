@@ -51,7 +51,17 @@ export class Details {
 
 	select(selected) {
 		this.nameElem.innerHTML = selected.name;
-		this.valueElem.appendChild(this._coordinateTable(selected.coords));
+
+		let coords = {
+			...selected.coords,
+			...selected.extraCoords
+		};
+
+		this.valueElem.appendChild(this._coordinateTable(coords));
+
+		if (selected.attributes) {
+			this.valueElem.appendChild(this._attributeTable(selected.attributes));
+		}
 	}
 
 	adjust(zoom) {
@@ -75,8 +85,8 @@ export class Details {
 
 		let headerRow = domCreate('tr', { className: 'headerRow' }, table);
 		domCreate('th', { innerHTML: 'Coordinates', className: 'name' }, headerRow);
-		domCreate('th', { innerHTML: 'X', className: 'x coord' }, headerRow);
-		domCreate('th', { innerHTML: 'Y', className: 'y coord' }, headerRow);
+		domCreate('th', { innerHTML: 'X', className: 'x value' }, headerRow);
+		domCreate('th', { innerHTML: 'Y', className: 'y value' }, headerRow);
 
 		let refreshValues = [];
 
@@ -100,7 +110,7 @@ export class Details {
 				}, row);
 
 				let xCell = domCreate('td', {
-					className: 'x coord',
+					className: 'x value',
 					onclick: () => {
 						this.origin[0] = c[0];
 						this.adjust(this.zoom);
@@ -109,7 +119,7 @@ export class Details {
 				}, row);
 
 				let yCell =domCreate('td', {
-					className: 'y coord',
+					className: 'y value',
 					onclick: () => {
 						this.origin[1] = c[1];
 						this.adjust(this.zoom);
@@ -124,6 +134,32 @@ export class Details {
 
 				refreshValues.push(refresh);
 				refresh();
+			});
+
+		return table;
+	}
+
+	_attributeTable(attrs) {
+		let table = domCreate('table', { className: 'attributeTable' })
+
+		let headerRow = domCreate('tr', { className: 'headerRow' }, table);
+		domCreate('th', { innerHTML: 'Attributes', className: 'name' }, headerRow);
+		domCreate('th', { className: 'value' }, headerRow);
+
+		Object.keys(attrs)
+			.forEach((name) => {
+				let a = attrs[name];
+				let row = domCreate('tr', {}, table);
+
+				domCreate('td', {
+					innerHTML: name,
+					className: 'name'
+				}, row);
+
+				let valueCell = domCreate('td', {
+					className: 'value',
+					innerHTML: this._formatLength(a)
+				}, row);
 			});
 
 		return table;

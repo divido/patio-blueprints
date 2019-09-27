@@ -23,6 +23,10 @@ export class Support extends BaseShape {
 			['SW ' + kind + ' Corner']: [this.west, this.south]
 		};
 
+		this.extraCoords = {
+			'Center': this.center
+		};
+
 		this.shape.style.fillColor = 'olive';
 	}
 
