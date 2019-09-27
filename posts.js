@@ -1,13 +1,13 @@
 import { Support } from './support.js';
 
 class Post extends Support {
-	constructor(layer, details, name, center) {
-		super(layer, details, 'Post', name, center);
+	constructor(layer, pillarLayer, details, name, center) {
+		super(layer, pillarLayer, details, 'Post', name, center);
 	}
 }
 
 export class Posts {
-	constructor(layer, foundation, deckBounds, details) {
+	constructor(layer, pillarLayer, foundation, deckBounds, details) {
 		this.features = [];
 
 		const postWidth = 3.5;
@@ -22,19 +22,19 @@ export class Posts {
 
 		let postY = foundation.coords['Main West'][1] + postToHouse + halfPost;
 		for (let idx = 1; idx < 5; idx++) {
-			this.features.push(new Post(layer, details, "Eastern Post " + idx, [this.xEasternPosts, postY]));
+			this.features.push(new Post(layer, pillarLayer, details, "Eastern Post " + idx, [this.xEasternPosts, postY]));
 			postY += postSpacingOC;
 		}
 
 		// ----------------------------------------
 		// Coordinates of post centers on southern side
 		this.ySouthernPosts = postY;
-		this.features.push(new Post(layer, details, "Southeast Corner Post", [this.xEasternPosts, this.ySouthernPosts]));
+		this.features.push(new Post(layer, pillarLayer, details, "Southeast Corner Post", [this.xEasternPosts, this.ySouthernPosts]));
 
 		let postX = this.xEasternPosts;
 		for (let idx = 1; idx < 4; idx++) {
 			postX -= postSpacingOC;
-			this.features.push(new Post(layer, details, "Southern Post " + idx, [postX, this.ySouthernPosts]));
+			this.features.push(new Post(layer, pillarLayer, details, "Southern Post " + idx, [postX, this.ySouthernPosts]));
 		}
 
 		deckBounds.setSouthernBorder(this.ySouthernPosts + halfPost + postToEdge);
@@ -49,11 +49,11 @@ export class Posts {
 		let thirdPostY = deckBounds.bounds.yStep - postToEdge - halfPost;
 		let secondPostY = (firstPostY + thirdPostY) / 2;
 
-		this.features.push(new Post(layer, details, "Western Post 1", [this.xWesternPosts, firstPostY]));
-		this.features.push(new Post(layer, details, "Western Post 2", [this.xWesternPosts, secondPostY]));
-		this.features.push(new Post(layer, details, "Western Post 3", [this.xWesternPosts, thirdPostY]));
+		this.features.push(new Post(layer, pillarLayer, details, "Western Post 1", [this.xWesternPosts, firstPostY]));
+		this.features.push(new Post(layer, pillarLayer, details, "Western Post 2", [this.xWesternPosts, secondPostY]));
+		this.features.push(new Post(layer, pillarLayer, details, "Western Post 3", [this.xWesternPosts, thirdPostY]));
 
-		this.features.push(new Post(layer, details, "Step Post", [this.xWesternPosts, this.ySouthernPosts]));
+		this.features.push(new Post(layer, pillarLayer, details, "Step Post", [this.xWesternPosts, this.ySouthernPosts]));
 
 		this.yWesternPosts_thirdPost = thirdPostY;
 	}

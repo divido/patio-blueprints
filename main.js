@@ -13,6 +13,7 @@ let joistViewProject;
 
 let allLayers;
 let allObjects;
+let pillarLayers;
 
 export function redraw() {
 	let zoomLevel = parseInt(document.getElementById('zoomLevel').value);
@@ -34,6 +35,9 @@ export function redraw() {
 	Object.keys(allLayers).forEach((layerName) =>
 		allLayers[layerName].visible = document.getElementById(layerName).checked);
 
+	Object.keys(pillarLayers).forEach((layerName) =>
+		pillarLayers[layerName].visible = document.getElementById(layerName).checked);
+
 	allObjects.forEach((obj) => obj.adjust(zoom));
 
 	allLayers.deckboards.opacity = 0.5;
@@ -46,6 +50,11 @@ export function initialize() {
 	[layoutProject, joistViewProject] = paper.projects;
 
 	layoutProject.activate();
+	pillarLayers = {
+		piers: new paper.Layer(),
+		posts: new paper.Layer()
+	};
+
 	allLayers = {
 		foundation: new paper.Layer(),
 		piers: new paper.Layer(),
@@ -63,12 +72,12 @@ export function initialize() {
 	let deckBounds = new DeckBounds(foundation);
 
 	// Posts updates the deckBounds math, and therefore must be built before deckboards
-	let posts = new Posts(allLayers.posts, foundation, deckBounds, details);
+	let posts = new Posts(allLayers.posts, pillarLayers.posts, foundation, deckBounds, details);
 	let deckboards = new DeckBoards(allLayers.deckboards, deckBounds, details);
 
 	let framing = new Framing(allLayers.framing, foundation, deckBounds, posts, details);
 
-	let piers = new Piers(allLayers.piers, framing, posts, details);
+	let piers = new Piers(allLayers.piers, pillarLayers.piers, framing, posts, details);
 	let siding = new Siding(allLayers.siding, foundation, details);
 
 	allObjects = [foundation, piers, framing, deckboards, posts, siding, details];
