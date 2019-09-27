@@ -52,12 +52,17 @@ export class Details {
 	select(selected) {
 		this.nameElem.innerHTML = selected.name;
 
-		let coords = {
-			...selected.coords,
-			...selected.extraCoords
+		let refreshFns = [];
+		let refresher = {
+			add: (fn) => refreshFns.push(fn),
+			refresh: () => refreshFns.forEach((fn) => fn())
 		};
 
-		this.valueElem.appendChild(this._coordinateTable(coords));
+		this.valueElem.appendChild(this._coordinateTable(selected.coords, 'Base Coords', refresher));
+
+		if (selected.extraCoords) {
+			this.valueElem.appendChild(this._coordinateTable(selected.extraCoords, 'Extra Coords', refresher));
+		}
 
 		if (selected.attributes) {
 			this.valueElem.appendChild(this._attributeTable(selected.attributes));
@@ -80,15 +85,13 @@ export class Details {
 		]);
 	}
 
-	_coordinateTable(coords) {
+	_coordinateTable(coords, name, refresher) {
 		let table = domCreate('table', { className: 'coordinateTable' })
 
 		let headerRow = domCreate('tr', { className: 'headerRow' }, table);
-		domCreate('th', { innerHTML: 'Coordinates', className: 'name' }, headerRow);
+		domCreate('th', { innerHTML: name, className: 'name' }, headerRow);
 		domCreate('th', { innerHTML: 'X', className: 'x value' }, headerRow);
 		domCreate('th', { innerHTML: 'Y', className: 'y value' }, headerRow);
-
-		let refreshValues = [];
 
 		Object.keys(coords)
 			.filter((name) => isFinite(coords[name][0]) && isFinite(coords[name][1]))
@@ -114,7 +117,7 @@ export class Details {
 					onclick: () => {
 						this.origin[0] = c[0];
 						this.adjust(this.zoom);
-						refreshValues.forEach((fn) => fn());
+						refresher.refresh();
 					}
 				}, row);
 
@@ -123,7 +126,7 @@ export class Details {
 					onclick: () => {
 						this.origin[1] = c[1];
 						this.adjust(this.zoom);
-						refreshValues.forEach((fn) => fn());
+						refresher.refresh();
 					}
 				}, row);
 
@@ -132,7 +135,7 @@ export class Details {
 					yCell.innerHTML = this._formatLength(c[1] - this.origin[1]);
 				};
 
-				refreshValues.push(refresh);
+				refresher.add(refresh);
 				refresh();
 			});
 
