@@ -1,31 +1,8 @@
-import { BaseShape } from './baseShape.js';
+import { Support } from './support.js';
 
-class Pier extends BaseShape {
+class Pier extends Support {
 	constructor(layer, details, name, center) {
-		super(layer, details);
-
-		this.name = name;
-
-		const halfPier = 3.5 / 2;
-
-		let east = center[0] + halfPier;
-		let west = center[0] - halfPier;
-
-		let north = center[1] - halfPier;
-		let south = center[1] + halfPier;
-
-		this.coords = {
-			'NW Pier Corner': [west, north],
-			'NE Pier Corner': [east, north],
-			'SE Pier Corner': [east, south],
-			'SW Pier Corner': [west, south]
-		};
-
-		this.shape.style.fillColor = 'olive';
-	}
-
-	adjust(zoom) {
-		super.adjustSegments(zoom);
+		super(layer, details, 'Pier', name, center);
 	}
 }
 

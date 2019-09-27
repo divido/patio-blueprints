@@ -1,31 +1,8 @@
-import { BaseShape } from './baseShape.js';
+import { Support } from './support.js';
 
-class Post extends BaseShape {
+class Post extends Support {
 	constructor(layer, details, name, center) {
-		super(layer, details);
-
-		this.name = name;
-
-		const halfPost = 3.5 / 2;
-
-		let east = center[0] + halfPost;
-		let west = center[0] - halfPost;
-
-		let north = center[1] - halfPost;
-		let south = center[1] + halfPost;
-
-		this.coords = {
-			'NW Post Corner': [west, north],
-			'NE Post Corner': [east, north],
-			'SE Post Corner': [east, south],
-			'SW Post Corner': [west, south]
-		};
-
-		this.shape.style.fillColor = 'olive';
-	}
-
-	adjust(zoom) {
-		super.adjustSegments(zoom);
+		super(layer, details, 'Post', name, center);
 	}
 }
 
