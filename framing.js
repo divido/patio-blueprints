@@ -161,9 +161,9 @@ export class Framing {
 			createV(name + ' 1', { east: coords.center, north: coords.north, south: coords.south }),
 			createV(name + ' 2', { west: coords.center, north: coords.north, south: coords.south }) ];
 
-		// Divide the span into thirds, but round to nearest eigth, giving extra to the center
-		let span = (innerEasternPost.west - officeWall.east);
-		let thirdOfSpan = Math.floor((span / 3) * 8) / 8;
+		// Divide the span into thirds, but round to nearest eighth, giving extra to the center
+		let span = (innerEasternPost.west - officeWall.east - 6); // Subtract the beam widths, to make inner joists as close as possble
+		let thirdOfSpan = Math.floor((span / 3) * 8) / 8 + 1.5; // Add the 1.5 to account for half a beam, so as to reference beam centers
 
 		let westBeam = createBeam('Western Beam', {
 			center: officeWall.east + thirdOfSpan,
