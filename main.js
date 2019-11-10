@@ -58,6 +58,7 @@ export function initialize() {
 	allLayers = {
 		foundation: new paper.Layer(),
 		piers: new paper.Layer(),
+		stepFraming: new paper.Layer(),
 		framing: new paper.Layer(),
 		deckboards: new paper.Layer(),
 		posts: new paper.Layer(),
@@ -75,7 +76,7 @@ export function initialize() {
 	let posts = new Posts(allLayers.posts, pillarLayers.posts, foundation, deckBounds, details);
 	let deckboards = new DeckBoards(allLayers.deckboards, deckBounds, details);
 
-	let framing = new Framing(allLayers.framing, foundation, deckBounds, posts, details);
+	let framing = new Framing(allLayers.stepFraming, allLayers.framing, foundation, deckBounds, deckboards, posts, details);
 
 	let piers = new Piers(allLayers.piers, pillarLayers.piers, framing, posts, details);
 	let siding = new Siding(allLayers.siding, foundation, details);

@@ -286,15 +286,15 @@ export class DeckBoards {
 
 		// ----------------------------------------
 
-		let stepConnector = new StepConnector(layer, details, deckBounds, 'spicedRum');
-		this.features.push(stepConnector);
+		this.stepConnector = new StepConnector(layer, details, deckBounds, 'spicedRum');
+		this.features.push(this.stepConnector);
 
 		createH({
 			name: "Step Border",
 			color: 'spicedRum',
 			north: bounds.yStep - T,
 			west: bounds.xWest,
-			east: stepConnector.outerCoords['North West'][0]
+			east: this.stepConnector.outerCoords['North West'][0]
 		}).miter('North West').miter('South East', 22.5);
 
 		createH({
@@ -344,7 +344,7 @@ export class DeckBoards {
 			createV({ north: bounds.yMain + TS,  south: bounds.yStep - TS });
 		}
 
-		stepConnector.trimBoard(createV({ north: bounds.yMain + TS,  south: bounds.ySouth - 2 * TS }));
+		this.stepConnector.trimBoard(createV({ north: bounds.yMain + TS,  south: bounds.ySouth - 2 * TS }));
 
 		for (let idx = 0; idx < 18; idx++) {
 			createV({ north: bounds.yMain + TS,  south: bounds.ySouth - 2 * TS});
